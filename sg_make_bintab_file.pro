@@ -73,7 +73,6 @@ pro sg_read_planfile,  planfile, maskno, rawdatadir, outdatadir, $
 
 
   deimos_data = getenv('DEIMOS_DATA')+'/'
-;  if deimos_data eq '/' then message, 'You need to set $DEIMOS_DATA!'
   if deimos_data eq '/' then deimos_data = '' ;not always set
 
   foo = findfile(planfile, count=filect)
@@ -211,10 +210,11 @@ end
 
 
 ;------------------------------------------------------
-pro sg_make_bintab_file, planfile,quick=quick
+pro sg_make_bintab_file, planfile
 
-  if n_elements(quick) eq 0 then quick = 0
-
+  quick = 0
+  isdeep=0
+  
 ; if the plan file isn't passed then search for it.
   if n_params() eq 0 then begin
     planfile = findfile('*.plan', count=nplans)
@@ -232,7 +232,6 @@ pro sg_make_bintab_file, planfile,quick=quick
 
 ; construct the name of the output .fits bin tab file.
   bin_name = STRCOMPRESS(maskname, /rem)
-  deimos_isdeep, isdeep, bin_name, file=file
   bin_file = bin_name + '.bintabs.fits'
 ; open the science frame .fits file.  
   fileheader=headfits(file)
