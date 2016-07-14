@@ -105,7 +105,7 @@ pro sg_read_planfile,  planfile, maskno, rawdatadir, outdatadir, $
 
     readf, unit, line
 
-;    substring = strsplit(line, /extract) ;split into two or more 
+    substring2 = strsplit(line, /extract) ;split into two or more 
     substring = strsplit(strcompress(line), $
                          '[^A-Za-z0-9._#/]+', /REGEX, /extract)
 
@@ -125,7 +125,7 @@ pro sg_read_planfile,  planfile, maskno, rawdatadir, outdatadir, $
                 arcnames= [arcnames, rawdatadir + $
                   strcompress(substring[1], /remove_all)]
 
-      'MAS': maskno =  strcompress(substring[1], /remove_all)
+      'MAS': maskno =  strcompress(substring2[1], /remove_all)
 
       'RAW': rawdatadir =  strcompress(substring[1], /remove_all) + '/'
 
@@ -222,9 +222,11 @@ pro sg_make_bintab_file, planfile
       else message, '(make_bintab_file.pro) ERROR: no planfile found!'
   endif
 ; read all of the smack in the .plan file.
+
   sg_read_planfile, planfile, maskname, rawdatadir, outdatadir, $
     flatnames, arcnames, sciencenames
 
+  
 ; select a raw frame from which to read the bin tables.
   file = sciencenames[0]
 
